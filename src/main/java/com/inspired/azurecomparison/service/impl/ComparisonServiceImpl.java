@@ -4,6 +4,7 @@ import com.inspired.azurecomparison.domain.FileDifference;
 import com.inspired.azurecomparison.enums.FileType;
 import com.inspired.azurecomparison.service.CSVComparisonService;
 import com.inspired.azurecomparison.service.ComparisonService;
+import com.inspired.azurecomparison.service.TXTFileComparison;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import java.util.function.Function;
 public class ComparisonServiceImpl implements ComparisonService {
 
     private final CSVComparisonService csvComparisonService;
+    private final TXTFileComparison txtFileComparison;
     private static final Logger logger = LoggerFactory.getLogger(ComparisonServiceImpl.class);
     private final Map<FileType, Function<MultipartFile, List<FileDifference>>> dispatch = new HashMap<>();
 
@@ -53,9 +55,7 @@ public class ComparisonServiceImpl implements ComparisonService {
     }
 
     private Function<MultipartFile, List<FileDifference>> compareTXTFile() {
-        return fileDifferences -> {
-            return null; //s -> TextComparison.compareData(s);
-        };
+        return txtFileComparison::comparingFileDataWithDataBaseData;
     }
 
     private Function<MultipartFile, List<FileDifference>> compareParqetFile() {
