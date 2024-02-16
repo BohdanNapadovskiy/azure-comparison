@@ -2,7 +2,6 @@ package com.inspired.azurecomparison.service;
 
 
 import com.inspired.azurecomparison.domain.FileDifference;
-import com.inspired.azurecomparison.service.impl.ComparisonServiceImpl;
 import com.inspired.azurecomparison.service.impl.DataDynamicService;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
