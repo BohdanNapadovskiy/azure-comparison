@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core: DEBUG
+
+spring:
+  datasource:
+    url: jdbc:sqlserver://inspired.database.windows.net:1433;database=InspiredComparison;user=bohdan@inspired;password=Bonya@1980;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+  jpa:
+    hibernate:
+      ddl-auto: update
