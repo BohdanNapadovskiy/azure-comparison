@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot & Thymeleaf File Upload</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<section class="my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h2>Upload file for comparison</h2>
+                <!--                <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>-->
+                <form action="#" method="post" th:action="@{/}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" name="file" class="form-control-file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Compare File</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:if="${ not#lists.isEmpty(comparison)}">
+        <p th:text="'Result of comparison'"></p>
+        <div>
+            <table>
+                <tr>
+                    <th>Row</th>
+                    <th>File data</th>
+                    <th>Database data</th>
+                </tr>
+                <tr th:each="line : ${comparison}">
+                    <td th:text="${line.lineNumber}"></td>
+                    <td th:text="${line.fileData}"></td>
+                    <td th:text="${line.databaseData}"></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>
