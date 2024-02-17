@@ -33,6 +33,7 @@
         color: #000000;
         padding: 5px;
     }
+
     .result-header {
         text-transform: uppercase;
         text-decoration-line: underline;
@@ -63,28 +64,28 @@
             </div>
         </div>
     </div>
-    <div th:if="${ not#lists.isEmpty(comparison)}">
-        <p class="result-header" th:text="'Result of comparison'"></p>
-        <div class="table_component" role="region" tabindex="0">
-            <table>
-                <col style="width:10%">
-                <col style="width:45%">
-                <col style="width:45%">
-                <tr>
-                    <th>Row</th>
-                    <th>File data</th>
-                    <th>Database data</th>
-                </tr>
-                <tr th:each="line : ${comparison}">
-                    <td th:text="${line.lineNumber}"></td>
-                    <td th:text="${line.fileData}"></td>
-                    <td th:text="${line.databaseData}"></td>
-                </tr>
-            </table>
-        </div>
-
-    </div>
 </section>
+<div th:if="${ not#lists.isEmpty(comparison)}">
+    <p class="result-header" th:text="'Result of comparison'"></p>
+    <div class="table_component" role="region" tabindex="0">
+        <table>
+            <col style="width:10%">
+            <col style="width:45%">
+            <col style="width:45%">
+            <tr>
+                <th>Row</th>
+                <th>File data</th>
+                <th>Database data</th>
+            </tr>
+            <tr th:each="line : ${comparison}">
+                <td th:text="${line.lineNumber}"></td>
+                <td th:text="${line.fileData}"></td>
+                <td th:text="${line.databaseData}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
 
 </body>
 </html>

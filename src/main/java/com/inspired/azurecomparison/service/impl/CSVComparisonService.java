@@ -1,8 +1,7 @@
-package com.inspired.azurecomparison.service;
+package com.inspired.azurecomparison.service.impl;
 
 
 import com.inspired.azurecomparison.domain.FileDifference;
-import com.inspired.azurecomparison.service.impl.DataDynamicService;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.RequiredArgsConstructor;
@@ -75,22 +74,10 @@ public class CSVComparisonService {
     }
 
     private static boolean arraysEqual(String[] arr1, String[] arr2) {
-        if (arr1.length != arr2.length) {
-            return false;
-        }
-        for (int i = 0; i < arr1.length; i++) {
-            if (!arr1[i].equals(arr2[i])) {
-                return false;
-            }
-        }
-        return true;
+        return arr1.length == arr2.length && java.util.Arrays.equals(arr1, arr2);
     }
 
     private static String arrayToString(String[] arr) {
-        StringBuilder sb = new StringBuilder();
-        for (String value : arr) {
-            sb.append(value).append(", ");
-        }
-        return sb.substring(0, sb.length() - 2);
+        return String.join(", ", arr);
     }
 }

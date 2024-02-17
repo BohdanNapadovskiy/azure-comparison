@@ -10,8 +10,9 @@ public enum FileType {
 
     PARQUET,
     CSV,
-    TXT,
-    DELTA;
+    XLSX,
+    XLS;
+
 
 
     public static FileType getFileTypeByFileName(String fileName) {

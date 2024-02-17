@@ -2,9 +2,7 @@ package com.inspired.azurecomparison.service.impl;
 
 import com.inspired.azurecomparison.domain.FileDifference;
 import com.inspired.azurecomparison.enums.FileType;
-import com.inspired.azurecomparison.service.CSVComparisonService;
 import com.inspired.azurecomparison.service.ComparisonService;
-import com.inspired.azurecomparison.service.TXTFileComparison;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -21,8 +19,10 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class ComparisonServiceImpl implements ComparisonService {
 
+    private final ParquetComparisonImpl parquetComparison;
     private final CSVComparisonService csvComparisonService;
-    private final TXTFileComparison txtFileComparison;
+    private final ExcelXLSXComparisonService excelXLSXComparisonService;
+    private final ExcelXLSComparisonService excelXLSComparisonService;
     private static final Logger logger = LoggerFactory.getLogger(ComparisonServiceImpl.class);
     private final Map<FileType, Function<MultipartFile, List<FileDifference>>> dispatch = new HashMap<>();
 
@@ -30,8 +30,9 @@ public class ComparisonServiceImpl implements ComparisonService {
     @PostConstruct
     public ComparisonServiceImpl init() {
         this.dispatch.put(FileType.CSV, this.compareCSVFile());
-        this.dispatch.put(FileType.TXT, this.compareTXTFile());
-        this.dispatch.put(FileType.PARQUET, this.compareParqetFile());
+        this.dispatch.put(FileType.PARQUET, this.compareParquetFile());
+        this.dispatch.put(FileType.XLSX, this.compareExcelXLSXFile());
+        this.dispatch.put(FileType.XLS, this.compareExcelXLSFile());
         return this;
     }
 
@@ -54,14 +55,16 @@ public class ComparisonServiceImpl implements ComparisonService {
         return csvComparisonService::comparingFileDataWithDataBaseData;
     }
 
-    private Function<MultipartFile, List<FileDifference>> compareTXTFile() {
-        return txtFileComparison::comparingFileDataWithDataBaseData;
+    private Function<MultipartFile, List<FileDifference>> compareParquetFile() {
+        return parquetComparison::readParquetFile;
     }
 
-    private Function<MultipartFile, List<FileDifference>> compareParqetFile() {
-        return fileDifferences -> {
-            return null;// s -> ParqetComparisonImpl.compareData(s, null);
-        };
+    private Function<MultipartFile, List<FileDifference>> compareExcelXLSXFile() {
+        return excelXLSXComparisonService::comparingFileDataWithDataBaseData;
+    }
+
+    private Function<MultipartFile, List<FileDifference>> compareExcelXLSFile() {
+        return excelXLSComparisonService::comparingFileDataWithDataBaseData;
     }
 
 
