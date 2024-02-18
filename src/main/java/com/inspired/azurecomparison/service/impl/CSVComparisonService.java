@@ -5,6 +5,7 @@ import com.inspired.azurecomparison.domain.FileDifference;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class CSVComparisonService {
 
 
     public List<FileDifference> comparingFileDataWithDataBaseData(MultipartFile file) {
-        String nameWithoutExtension = file.getOriginalFilename().replaceAll("\\.\\w+$", "");
-        List<String> databaseResult = dataDynamicService.getAllData(nameWithoutExtension);
+        String fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
+        List<String> databaseResult = dataDynamicService.getAllData(fileName);
         return compareDataFromFileAndDataBase(file, databaseResult);
     }
 

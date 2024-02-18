@@ -3,6 +3,7 @@ package com.inspired.azurecomparison.service.impl;
 
 import com.inspired.azurecomparison.domain.FileDifference;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.hadoop.example.GroupReadSupport;
 import org.apache.parquet.hadoop.ParquetReader;
@@ -29,7 +30,7 @@ public class ParquetComparisonImpl {
 
     public List<FileDifference> readParquetFile(MultipartFile file) {
         List<FileDifference> result;
-        String nameWithoutExtension = file.getOriginalFilename().replaceAll("\\.\\w+$", "");
+        String nameWithoutExtension = FilenameUtils.getBaseName(file.getOriginalFilename());
         Path hadoopFilepath = saveMultipartFileAndGetHadoopPath(file);
         List<String> databaseResult = dataDynamicService.getAllData(nameWithoutExtension);
         GroupReadSupport readSupport = new GroupReadSupport();
@@ -84,7 +85,7 @@ public class ParquetComparisonImpl {
 
     public Path saveMultipartFileAndGetHadoopPath(MultipartFile multipartFile) {
         String formattedInstant = String.valueOf(Instant.now().getEpochSecond());
-        String filePath = formattedInstant + multipartFile.getOriginalFilename();
+        String filePath = formattedInstant + FilenameUtils.getBaseName(multipartFile.getOriginalFilename())+"."+FilenameUtils.getExtension(multipartFile.getOriginalFilename());
         java.nio.file.Path path = Paths.get(filePath);
         try {
             Files.write(path, multipartFile.getBytes());

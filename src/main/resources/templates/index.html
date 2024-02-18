@@ -40,25 +40,67 @@
         text-decoration-thickness: auto;
 
     }
+    .folders-form {
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        background-color: #f3f3f3;
+        border-radius: 8px;
+    }
+
+    .folders-form div {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+
+    .folders-form label {
+        flex-basis: 40%;
+        margin-right: 5%;
+    }
+
+    .folders-form input[type=file] {
+        flex-grow: 1;
+        border: 1px solid #ccc;
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 4px;
+        display: block; /* Make the button extend to the full container width */
+        width: 100%; /* Set a specific width if needed */
+        box-sizing: border-box; /* Adjust box sizing to ensure padding doesn't affect width */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
 </style>
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Boot & Thymeleaf File Upload</title>
+    <title>Comparison files</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
-<body>
+<body >
 
 <section class="my-5">
     <div class="container">
         <div class="row">
             <div class="col-md-8 mx-auto">
-                <h2>Upload file for comparison</h2>
-                <!--                <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>-->
-                <form action="#" method="post" th:action="@{/}" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <input type="file" name="file" class="form-control-file">
+                <form class="folders-form" th:action="@{/compare}" method="post" enctype="multipart/form-data">
+                    <h2>Comparison file with database data</h2>
+                    <div>
+                        <label for="compareFiles"> Folder for uploading </label>
+                        <input type="file" id="compareFiles" name="compareFiles" webkitdirectory directory multiple>
                     </div>
+                    <span th:if="${errorMessage != null}" th:text="${errorMessage}"></span>
                     <button type="submit" class="btn btn-primary">Compare File</button>
                 </form>
             </div>

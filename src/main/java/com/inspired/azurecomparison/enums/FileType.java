@@ -11,12 +11,12 @@ public enum FileType {
     PARQUET,
     CSV,
     XLSX,
+    TXT,
     XLS;
 
 
 
-    public static FileType getFileTypeByFileName(String fileName) {
-        String extension = FilenameUtils.getExtension(fileName);
+    public static FileType getFileTypeByFileName(String extension) {
         return Arrays.stream(FileType.values())
                 .filter(t-> t.toString().equalsIgnoreCase(extension))
                 .findAny()

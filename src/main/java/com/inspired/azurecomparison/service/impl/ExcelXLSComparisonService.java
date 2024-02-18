@@ -2,6 +2,7 @@ package com.inspired.azurecomparison.service.impl;
 
 import com.inspired.azurecomparison.domain.FileDifference;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -25,7 +26,7 @@ public class ExcelXLSComparisonService extends ExcelComparisonService {
     private final DataDynamicService dataDynamicService;
 
     public List<FileDifference> comparingFileDataWithDataBaseData(MultipartFile file) {
-        String nameWithoutExtension = extractNameWithoutExtension(file.getOriginalFilename());
+        String nameWithoutExtension = FilenameUtils.getBaseName((file.getOriginalFilename()));
         List<String> databaseResult = dataDynamicService.getAllData(nameWithoutExtension);
         return compareDataFromFileAndDataBase(file, databaseResult);
     }

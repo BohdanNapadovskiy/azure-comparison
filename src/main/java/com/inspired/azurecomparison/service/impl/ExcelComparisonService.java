@@ -1,6 +1,7 @@
 package com.inspired.azurecomparison.service.impl;
 
 import com.inspired.azurecomparison.domain.FileDifference;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,17 +21,14 @@ import java.util.List;
 public class ExcelComparisonService {
 
 
-
-
-
     public String extractNameWithoutExtension(String filename) {
         return filename.replaceAll("\\.\\w+$", "");
     }
 
     public String saveMultipartFileAndGetFile(MultipartFile multipartFile) {
         String formattedInstant = String.valueOf(Instant.now().getEpochSecond());
-        File file = new File(formattedInstant + multipartFile.getOriginalFilename());
-
+        String filePath = formattedInstant + FilenameUtils.getBaseName(multipartFile.getOriginalFilename())+"."+FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        File file = new File(filePath);
         try (OutputStream os = new FileOutputStream(file)) {
             os.write(multipartFile.getBytes());
         } catch (Exception e) {

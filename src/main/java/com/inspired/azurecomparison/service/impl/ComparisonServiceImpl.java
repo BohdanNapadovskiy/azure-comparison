@@ -5,6 +5,7 @@ import com.inspired.azurecomparison.enums.FileType;
 import com.inspired.azurecomparison.service.ComparisonService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,10 @@ import java.util.function.Function;
 public class ComparisonServiceImpl implements ComparisonService {
 
     private final ParquetComparisonImpl parquetComparison;
+    private final TXTComparisonService txtComparisonService;
     private final CSVComparisonService csvComparisonService;
-    private final ExcelXLSXComparisonService excelXLSXComparisonService;
     private final ExcelXLSComparisonService excelXLSComparisonService;
+    private final ExcelXLSXComparisonService excelXLSXComparisonService;
     private static final Logger logger = LoggerFactory.getLogger(ComparisonServiceImpl.class);
     private final Map<FileType, Function<MultipartFile, List<FileDifference>>> dispatch = new HashMap<>();
 
@@ -33,14 +35,14 @@ public class ComparisonServiceImpl implements ComparisonService {
         this.dispatch.put(FileType.PARQUET, this.compareParquetFile());
         this.dispatch.put(FileType.XLSX, this.compareExcelXLSXFile());
         this.dispatch.put(FileType.XLS, this.compareExcelXLSFile());
+        this.dispatch.put(FileType.TXT, this.compareTXTFile());
         return this;
     }
 
 
     @Override
     public List<FileDifference> getResultOfComparisonAccordingFileExtension(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        FileType fileType = FileType.getFileTypeByFileName(fileName);
+        FileType fileType = FileType.getFileTypeByFileName(FilenameUtils.getExtension(file.getOriginalFilename()));
         if (dispatch.containsKey(fileType)) {
             logger.debug("Starting process for comparing data from csv file {}", file.getOriginalFilename());
             return dispatch.get(fileType).apply(file);
@@ -65,6 +67,10 @@ public class ComparisonServiceImpl implements ComparisonService {
 
     private Function<MultipartFile, List<FileDifference>> compareExcelXLSFile() {
         return excelXLSComparisonService::comparingFileDataWithDataBaseData;
+    }
+
+    private Function<MultipartFile, List<FileDifference>> compareTXTFile() {
+        return txtComparisonService::comparingFileDataWithDataBaseData;
     }
 
 
