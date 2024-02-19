@@ -31,6 +31,29 @@ public class ExcelXLSXComparisonService extends ExcelComparisonService {
         return compareDataFromFileAndDataBase(file, databaseResult);
     }
 
+    public List<FileDifference> comparingFileDataWithDataBaseData(String downloadedFile) {
+        String nameWithoutExtension = FilenameUtils.getBaseName(downloadedFile);
+        List<String> databaseResult = dataDynamicService.getAllData(nameWithoutExtension);
+        return compareDataFromFileAndDataBase(downloadedFile, databaseResult);
+    }
+
+
+    private List<FileDifference> compareDataFromFileAndDataBase(String downloadedFile, List<String> databaseData) {
+        List<FileDifference> differences = new ArrayList<>();
+        FileInputStream file = null;
+        try {
+            file = new FileInputStream(downloadedFile);
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            compareRowsWithDatabase(sheet, databaseData, differences);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return differences;
+    }
+
+
 
     private List<FileDifference> compareDataFromFileAndDataBase(MultipartFile multipartFile, List<String> databaseData) {
         List<FileDifference> differences = new ArrayList<>();

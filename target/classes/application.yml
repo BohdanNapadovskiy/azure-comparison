@@ -10,10 +10,16 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:sqlserver://inspired.database.windows.net:1433;database=InspiredComparison;user=bohdan@inspired;password=Bonya@1980;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    url: jdbc:sqlserver://inspired.database.windows.net:1433;database=InspiredComparison;user=bohdan@inspired;password=Bonya@1980;encrypt=false;trustServerCertificate=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
   jpa:
     hibernate:
       ddl-auto: update
 
+
 application:
-  reportPath: C:\learning\report\
+  reportPath: report/
+
+azure:
+  connection-string: DefaultEndpointsProtocol=https;AccountName=inspireddemostorage;AccountKey=YK02DEORcQW3L8aPgr0cvVWLgioJU9yhdsrTeOpT5d705JIHzzvVYCeUPT8RYmY6qPzlhyjGEg51+AStS5MbLQ==;EndpointSuffix=core.windows.net
+  account-name: inspireddemostorage
+

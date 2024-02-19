@@ -44,6 +44,23 @@ public class ParquetComparisonImpl {
     }
 
 
+    public List<FileDifference> readParquetFile(String downloadedFile) {
+        List<FileDifference> result;
+        String nameWithoutExtension = FilenameUtils.getBaseName(downloadedFile);
+        Path hadoopFilepath = new Path(downloadedFile);
+        List<String> databaseResult = dataDynamicService.getAllData(nameWithoutExtension);
+        GroupReadSupport readSupport = new GroupReadSupport();
+        try (ParquetReader<Group> reader = ParquetReader.builder(readSupport, hadoopFilepath).build()) {
+            result = generateFileReport(reader, databaseResult);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        deleteTemporaryFile(hadoopFilepath.getName());
+        return result;
+    }
+
+
+
 
     private List<FileDifference> generateFileReport(ParquetReader<Group> reader, List<String> databaseData) throws IOException {
         List<FileDifference> result = new ArrayList<>();

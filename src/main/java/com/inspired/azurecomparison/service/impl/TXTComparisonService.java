@@ -30,6 +30,47 @@ public class TXTComparisonService {
     }
 
 
+    public List<FileDifference> comparingFileDataWithDataBaseData(String downloadedFile) {
+        String fileName = FilenameUtils.getBaseName(downloadedFile);
+        List<String> databaseResult = dataDynamicService.getAllData(fileName);
+        return compareDataFromFileAndDataBase(downloadedFile, databaseResult);
+    }
+
+
+    private List<FileDifference> compareDataFromFileAndDataBase(String downloadedFile, List<String> databaseData) {
+        logger.debug("Creating a result of comparison from csv file {} and database", downloadedFile);
+        List<FileDifference> result =new ArrayList<>();
+        int lineNumber = 1;
+        int listIndex = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(downloadedFile))) {
+            String line;
+            while ((line = reader.readLine()) != null && listIndex < databaseData.size()) {
+                String listLine = databaseData.get(listIndex);
+                logger.debug("Found difference in data in row number {}, file data {} data from db {} ", lineNumber, line, listLine);
+                if (!line.equalsIgnoreCase(listLine))
+                    result.add(FileDifference.buildFileDifference(lineNumber, line, listLine));
+                lineNumber++;
+                listIndex++;
+            }
+
+            while ((line = reader.readLine()) != null) {
+                result.add(FileDifference.buildFileDifference(lineNumber, line, ""));
+                lineNumber++;
+            }
+
+            while (listIndex < databaseData.size()) {
+                result.add(FileDifference.buildFileDifference(lineNumber, "", databaseData.get(listIndex)));
+                listIndex++;
+            }
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+
     private List<FileDifference> compareDataFromFileAndDataBase(MultipartFile file, List<String> databaseData) {
         logger.debug("Creating a result of comparison from csv file {} and database", file.getOriginalFilename());
         String filePath = saveMultipartFileAndGetFile(file);

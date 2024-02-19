@@ -9,4 +9,5 @@ public interface ComparisonService {
 
     List<FileDifference> getResultOfComparisonAccordingFileExtension(MultipartFile file);
 
+
 }

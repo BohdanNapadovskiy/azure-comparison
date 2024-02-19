@@ -30,7 +30,6 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void createCSVReport(List<FileDifference> differences) {
 
-//        String directoryPath = "report/";
         String formattedInstant = String.valueOf(Instant.now().getEpochSecond());
         String fileName = formattedInstant + "report.csv";
         File file = new File(reportDirectory + fileName);

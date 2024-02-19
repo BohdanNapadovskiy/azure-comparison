@@ -14,7 +14,7 @@
     <name>azure-comparison</name>
     <description>Java Azure Integration and comparison tool</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>

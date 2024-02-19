@@ -11,12 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.*;
 
 import com.opencsv.CSVReader;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +31,27 @@ public class CSVComparisonService {
         List<String> databaseResult = dataDynamicService.getAllData(fileName);
         return compareDataFromFileAndDataBase(file, databaseResult);
     }
+
+    public List<FileDifference> comparingFileDataWithDataBaseData(String file) {
+        String fileName = FilenameUtils.getBaseName(file);
+        List<String> databaseResult = dataDynamicService.getAllData(fileName);
+        return compareDataFromFileAndDataBase(file, databaseResult);
+    }
+
+
+    private List<FileDifference> compareDataFromFileAndDataBase(String filePath, List<String> databaseData) {
+//        logger.debug("Creating a result of comparison from csv file {} and database", file.getOriginalFilename());
+        List<FileDifference> result =new ArrayList<>();
+        try (Reader reader = new InputStreamReader(new FileInputStream(filePath));
+             CSVReader csvData = new CSVReaderBuilder(reader).withSkipLines(1).build()) {
+            result =  generateCSVFileReport(csvData, databaseData);
+        } catch (CsvValidationException | IOException exception) {
+            exception.printStackTrace();
+        }
+        return result;
+    }
+
+
 
 
     private List<FileDifference> compareDataFromFileAndDataBase(MultipartFile file, List<String> databaseData) {

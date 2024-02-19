@@ -21,10 +21,6 @@ import java.util.List;
 public class ExcelComparisonService {
 
 
-    public String extractNameWithoutExtension(String filename) {
-        return filename.replaceAll("\\.\\w+$", "");
-    }
-
     public String saveMultipartFileAndGetFile(MultipartFile multipartFile) {
         String formattedInstant = String.valueOf(Instant.now().getEpochSecond());
         String filePath = formattedInstant + FilenameUtils.getBaseName(multipartFile.getOriginalFilename())+"."+FilenameUtils.getExtension(multipartFile.getOriginalFilename());

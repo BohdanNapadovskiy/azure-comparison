@@ -1,6 +1,7 @@
 package com.inspired.azurecomparison.web.controller;
 
 import com.inspired.azurecomparison.domain.FileDifference;
+import com.inspired.azurecomparison.service.AzureFileOperation;
 import com.inspired.azurecomparison.service.ComparisonService;
 import com.inspired.azurecomparison.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final ComparisonService comparisonService;
     private final ReportService reportService;
+    private final ComparisonService comparisonService;
+    private final AzureFileOperation azureFileOperation;
 
     @GetMapping("/")
     String index() {
@@ -51,8 +53,16 @@ public class HomeController {
             errorMessage = "Folders contain more than ine file";
             model.addAttribute("error-message", errorMessage);
         }
-
         return "index";
+    }
+
+    @GetMapping("/azure")
+    public void compareFileFromAzure() {
+        List<FileDifference> result = azureFileOperation.compareAzureFileWithDataBase("filesharedemo", "employees.csv");
+//        model.addAttribute("message", "Result of comparison");
+//        model.addAttribute("comparison", result);
+        reportService.createCSVReport(result);
+
     }
 
 

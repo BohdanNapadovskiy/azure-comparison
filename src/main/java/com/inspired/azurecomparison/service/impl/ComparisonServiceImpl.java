@@ -28,7 +28,6 @@ public class ComparisonServiceImpl implements ComparisonService {
     private static final Logger logger = LoggerFactory.getLogger(ComparisonServiceImpl.class);
     private final Map<FileType, Function<MultipartFile, List<FileDifference>>> dispatch = new HashMap<>();
 
-
     @PostConstruct
     public ComparisonServiceImpl init() {
         this.dispatch.put(FileType.CSV, this.compareCSVFile());
@@ -53,9 +52,11 @@ public class ComparisonServiceImpl implements ComparisonService {
         }
     }
 
+
     private Function<MultipartFile, List<FileDifference>> compareCSVFile() {
         return csvComparisonService::comparingFileDataWithDataBaseData;
     }
+
 
     private Function<MultipartFile, List<FileDifference>> compareParquetFile() {
         return parquetComparison::readParquetFile;
