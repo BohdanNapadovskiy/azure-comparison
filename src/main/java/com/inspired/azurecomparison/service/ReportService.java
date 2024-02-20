@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ReportService {
 
-    void createCSVReport(List<FileDifference> differences);
+    void createCSVReport(List<FileDifference> differences, String reportDirectory, String fileName);
 
 
 
