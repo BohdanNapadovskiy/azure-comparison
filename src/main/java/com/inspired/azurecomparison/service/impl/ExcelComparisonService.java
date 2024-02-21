@@ -20,20 +20,6 @@ import java.util.List;
 @Service
 public class ExcelComparisonService {
 
-
-    public String saveMultipartFileAndGetFile(MultipartFile multipartFile) {
-        String formattedInstant = String.valueOf(Instant.now().getEpochSecond());
-        String filePath = formattedInstant + FilenameUtils.getBaseName(multipartFile.getOriginalFilename())+"."+FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        File file = new File(filePath);
-        try (OutputStream os = new FileOutputStream(file)) {
-            os.write(multipartFile.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return file.getAbsolutePath();
-    }
-
     public void compareRowsWithDatabase(Sheet sheet, List<String> databaseData, List<FileDifference> differences) {
         Iterator<Row> rowIterator = sheet.iterator();
         int listIndex = 0;
@@ -42,11 +28,9 @@ public class ExcelComparisonService {
         while (rowIterator.hasNext() || listIndex < databaseData.size()) {
             String fileLine = rowIterator.hasNext() ? excelRowToString(rowIterator.next()) : "";
             String dbLine = listIndex < databaseData.size() ? databaseData.get(listIndex) : "";
-
             if (!fileLine.equals(dbLine)) {
                 differences.add(FileDifference.buildFileDifference(lineNumber, fileLine, dbLine));
             }
-
             lineNumber++;
             if (rowIterator.hasNext() || fileLine.isEmpty()) {
                 listIndex++;

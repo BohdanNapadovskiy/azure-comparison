@@ -1,6 +1,8 @@
 package com.inspired.azurecomparison.service.impl;
 
 
+import com.inspired.azurecomparison.service.FileComparingService;
+import com.inspired.azurecomparison.service.db.DataDynamicService;
 import com.inspired.azurecomparison.domain.FileDifference;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
@@ -22,24 +24,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CSVComparisonService {
 
-    private final DataDynamicService dataDynamicService;
     private static final Logger logger = LoggerFactory.getLogger(CSVComparisonService.class);
 
 
-    public List<FileDifference> comparingFileDataWithDataBaseData(MultipartFile file) {
-        String fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
-        List<String> databaseResult = dataDynamicService.getAllData(fileName);
-        return compareDataFromFileAndDataBase(file, databaseResult);
-    }
-
-    public List<FileDifference> comparingFileDataWithDataBaseData(String file) {
-        String fileName = FilenameUtils.getBaseName(file);
-        List<String> databaseResult = dataDynamicService.getAllData(fileName);
-        return compareDataFromFileAndDataBase(file, databaseResult);
-    }
-
-
-    private List<FileDifference> compareDataFromFileAndDataBase(String filePath, List<String> databaseData) {
+    public List<FileDifference> compareDataFromFileAndDataBase(String filePath, List<String> databaseData) {
 //        logger.debug("Creating a result of comparison from csv file {} and database", file.getOriginalFilename());
         List<FileDifference> result =new ArrayList<>();
         try (Reader reader = new InputStreamReader(new FileInputStream(filePath));
@@ -51,20 +39,6 @@ public class CSVComparisonService {
         return result;
     }
 
-
-
-
-    private List<FileDifference> compareDataFromFileAndDataBase(MultipartFile file, List<String> databaseData) {
-        logger.debug("Creating a result of comparison from csv file {} and database", file.getOriginalFilename());
-        List<FileDifference> result =new ArrayList<>();
-        try (Reader reader = new InputStreamReader(file.getInputStream());
-             CSVReader csvData = new CSVReaderBuilder(reader).withSkipLines(1).build()) {
-            result =  generateCSVFileReport(csvData, databaseData);
-        } catch (CsvValidationException | IOException exception) {
-            exception.printStackTrace();
-        }
-        return result;
-    }
 
     private List<FileDifference> generateCSVFileReport(CSVReader csvData, List<String> databaseData) throws CsvValidationException, IOException {
         List<FileDifference> result =new ArrayList<>();

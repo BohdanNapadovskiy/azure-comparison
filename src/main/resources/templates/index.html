@@ -114,27 +114,27 @@
         </div>
     </div>
 </section>
-<div th:if="${not#maps.isEmpty(comparison)}">
-    <h2 class="result-header" th:text="'Result of comparison'"></h2>
-    <div th:each="entry : ${comparison.entrySet()}" class="table_component" role="region" tabindex="0">
-        <h3 th:text="${entry.key}"></h3>
-        <table>
-            <col style="width:10%">
-            <col style="width:45%">
-            <col style="width:45%">
-            <tr>
-                <th>Row</th>
-                <th>File data</th>
-                <th>Database data</th>
-            </tr>
-            <tr th:each="line : ${entry.value}">
-                <td th:text="${line.lineNumber}"></td>
-                <td th:text="${line.fileData}"></td>
-                <td th:text="${line.databaseData}"></td>
-            </tr>
-        </table>
-    </div>
-</div>
+<!--<div th:if="${not#maps.isEmpty(comparison)}">-->
+<!--    <h2 class="result-header" th:text="'Result of comparison'"></h2>-->
+<!--    <div th:each="entry : ${comparison.entrySet()}" class="table_component" role="region" tabindex="0">-->
+<!--        <h3 th:text="${entry.key}"></h3>-->
+<!--        <table>-->
+<!--            <col style="width:10%">-->
+<!--            <col style="width:45%">-->
+<!--            <col style="width:45%">-->
+<!--            <tr>-->
+<!--                <th>Row</th>-->
+<!--                <th>File data</th>-->
+<!--                <th>Database data</th>-->
+<!--            </tr>-->
+<!--            <tr th:each="line : ${entry.value}">-->
+<!--                <td th:text="${line.lineNumber}"></td>-->
+<!--                <td th:text="${line.fileData}"></td>-->
+<!--                <td th:text="${line.databaseData}"></td>-->
+<!--            </tr>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
 
 </body>
 </html>

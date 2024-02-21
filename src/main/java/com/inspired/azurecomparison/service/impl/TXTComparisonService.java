@@ -1,9 +1,7 @@
 package com.inspired.azurecomparison.service.impl;
 
+import com.inspired.azurecomparison.service.db.DataDynamicService;
 import com.inspired.azurecomparison.domain.FileDifference;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvValidationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -23,21 +21,7 @@ public class TXTComparisonService {
     private final DataDynamicService dataDynamicService;
     private static final Logger logger = LoggerFactory.getLogger(CSVComparisonService.class);
 
-    public List<FileDifference> comparingFileDataWithDataBaseData(MultipartFile file) {
-        String fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
-        List<String> databaseResult = dataDynamicService.getAllData(fileName);
-        return compareDataFromFileAndDataBase(file, databaseResult);
-    }
-
-
-    public List<FileDifference> comparingFileDataWithDataBaseData(String downloadedFile) {
-        String fileName = FilenameUtils.getBaseName(downloadedFile);
-        List<String> databaseResult = dataDynamicService.getAllData(fileName);
-        return compareDataFromFileAndDataBase(downloadedFile, databaseResult);
-    }
-
-
-    private List<FileDifference> compareDataFromFileAndDataBase(String downloadedFile, List<String> databaseData) {
+    public List<FileDifference> compareDataFromFileAndDataBase(String downloadedFile, List<String> databaseData) {
         logger.debug("Creating a result of comparison from csv file {} and database", downloadedFile);
         List<FileDifference> result =new ArrayList<>();
         int lineNumber = 1;

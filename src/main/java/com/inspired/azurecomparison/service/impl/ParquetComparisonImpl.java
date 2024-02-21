@@ -1,6 +1,7 @@
 package com.inspired.azurecomparison.service.impl;
 
 
+import com.inspired.azurecomparison.service.db.DataDynamicService;
 import com.inspired.azurecomparison.domain.FileDifference;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -28,34 +29,15 @@ public class ParquetComparisonImpl {
     private final DataDynamicService dataDynamicService;
     private static final Logger logger = LoggerFactory.getLogger(CSVComparisonService.class);
 
-    public List<FileDifference> readParquetFile(MultipartFile file) {
+    public List<FileDifference> compareDataFromFileAndDataBase(String downloadedFile, List<String> databaseResult) {
         List<FileDifference> result;
-        String nameWithoutExtension = FilenameUtils.getBaseName(file.getOriginalFilename());
-        Path hadoopFilepath = saveMultipartFileAndGetHadoopPath(file);
-        List<String> databaseResult = dataDynamicService.getAllData(nameWithoutExtension);
-        GroupReadSupport readSupport = new GroupReadSupport();
-        try (ParquetReader<Group> reader = ParquetReader.builder(readSupport, hadoopFilepath).build()) {
-            result = generateFileReport(reader, databaseResult);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        deleteTemporaryFile(hadoopFilepath.getName());
-        return result;
-    }
-
-
-    public List<FileDifference> readParquetFile(String downloadedFile) {
-        List<FileDifference> result;
-        String nameWithoutExtension = FilenameUtils.getBaseName(downloadedFile);
         Path hadoopFilepath = new Path(downloadedFile);
-        List<String> databaseResult = dataDynamicService.getAllData(nameWithoutExtension);
         GroupReadSupport readSupport = new GroupReadSupport();
         try (ParquetReader<Group> reader = ParquetReader.builder(readSupport, hadoopFilepath).build()) {
             result = generateFileReport(reader, databaseResult);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        deleteTemporaryFile(hadoopFilepath.getName());
         return result;
     }
 
@@ -97,29 +79,6 @@ public class ParquetComparisonImpl {
             resultList.add(record.getValueToString(i, 0));
         }
         return String.join(",", resultList);
-    }
-
-
-    public Path saveMultipartFileAndGetHadoopPath(MultipartFile multipartFile) {
-        String formattedInstant = String.valueOf(Instant.now().getEpochSecond());
-        String filePath = formattedInstant + FilenameUtils.getBaseName(multipartFile.getOriginalFilename())+"."+FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        java.nio.file.Path path = Paths.get(filePath);
-        try {
-            Files.write(path, multipartFile.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return new Path(filePath);
-    }
-
-    private void deleteTemporaryFile(String name) {
-        java.nio.file.Path path = Paths.get(name);
-        try {
-            Files.delete(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
 }

@@ -1,4 +1,4 @@
-package com.inspired.azurecomparison.service.impl;
+package com.inspired.azurecomparison.service.db;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;

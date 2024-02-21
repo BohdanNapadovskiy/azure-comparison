@@ -5,7 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public interface ComparisonAzureService {
+public interface FileComparingService {
 
-    List<FileDifference> getResultOfComparisonAccordingFileExtension(String downloadedFile);
+
+    void compareAzureFilesWithDataBase(String azureDirectory, String reportDirectory);
 }
