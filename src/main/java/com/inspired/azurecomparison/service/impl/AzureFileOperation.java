@@ -20,12 +20,10 @@ import java.util.List;
 
 public class AzureFileOperation {
 
-    @Value("${azure.share-name}")
-    private String SHARE_NAME;
 
 
-    public ShareClient buildGetShareClient(String fileStorage) {
-        return new ShareClientBuilder().endpoint(String.format(AzureConfig.getShareUrl(), AzureConfig.getAccountName()))
+    public ShareClient buildGetShareClient(String accountName,String fileStorage) {
+        return new ShareClientBuilder().endpoint(String.format(AzureConfig.getShareUrl(), accountName))
                 .connectionString(AzureConfig.getConnectionString()).shareName(fileStorage).buildClient();
     }
 

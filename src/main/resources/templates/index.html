@@ -95,14 +95,23 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 mx-auto">
-                <form class="folders-form" th:action="@{/compare}" method="post" enctype="multipart/form-data">
+                <form class="folders-form" th:action="@{/compare}"  method="post" th:object="${azureForm}" enctype="multipart/form-data">
                     <h2>Comparison file with database data</h2>
                     <div>
-                        <label for="AzureFolder">Azure root folder </label>
-                        <input type="text" id="AzureFolder" name="azureFolder" th:value="${azureFolder}">
+                        <label for="AzureStorageAccount">Azure storage account</label>
+                        <input type="text" id="AzureStorageAccount" name="azureStorageAccount" th:value="${azureStorageAccount}">
                     </div>
                     <div>
-                        <label for="reportFolder"> Folder for report </label>
+                        <label for="AzureFileShareName">Azure file share</label>
+                        <input type="text" id="AzureFileShareName" name="azureFileShareName" th:value="${azureFileShareName}">
+                    </div>
+                    <div>
+                        <label for="AzureFolder">Azure root folder</label>
+                        <input type="text" id="AzureFolder" name="azureFolder" th:value="${azureFolder}">
+                    </div>
+
+                    <div>
+                        <label for="reportFolder"> Folder for report</label>
                         <input type="text" id="reportFolder" name="reportFolder" th:value="${reportFolder}">
                     </div>
                     <button type="submit" class="btn btn-primary" th:disabled="${submitting}">

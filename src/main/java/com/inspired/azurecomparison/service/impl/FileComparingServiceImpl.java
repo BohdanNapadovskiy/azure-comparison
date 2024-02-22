@@ -2,6 +2,7 @@ package com.inspired.azurecomparison.service.impl;
 
 import com.azure.storage.file.share.ShareClient;
 import com.azure.storage.file.share.ShareDirectoryClient;
+import com.inspired.azurecomparison.domain.AzureForm;
 import com.inspired.azurecomparison.domain.FileDifference;
 import com.inspired.azurecomparison.service.FileComparingService;
 import com.inspired.azurecomparison.service.ReportService;
@@ -23,11 +24,11 @@ public class FileComparingServiceImpl implements FileComparingService {
     private final DataDynamicService dataDynamicService;
 
     @Override
-    public void compareAzureFilesWithDataBase(String azureDirectory, String reportDirectory) {
-        ShareClient shareClient = fileOperation.buildGetShareClient("filesharedemo");
+    public void compareAzureFilesWithDataBase(AzureForm azureForm) {
+        ShareClient shareClient = fileOperation.buildGetShareClient(azureForm.getAzureStorageAccount(), azureForm.getAzureFileShareName());
         ShareDirectoryClient rootDirectoryClient = shareClient.getDirectoryClient("");
-        ShareDirectoryClient directoryClient = fileOperation.createDirectoryClient(rootDirectoryClient, "", azureDirectory);
-        listFilesAndFolders(directoryClient, azureDirectory, reportDirectory);
+        ShareDirectoryClient directoryClient = fileOperation.createDirectoryClient(rootDirectoryClient, "", azureForm.getAzureFolder());
+        listFilesAndFolders(directoryClient, azureForm.getAzureFolder(), azureForm.getReportFolder());
     }
 
     private void listFilesAndFolders(ShareDirectoryClient directoryClient, String parentPath, String reportDirectory) {
